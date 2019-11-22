@@ -1,5 +1,5 @@
 import numpy as np
-import onnx
+#import onnx
 from onnx import TensorProto, helper
 
 import finn.core.onnx_exec as oxe
@@ -8,8 +8,8 @@ from finn.core.modelwrapper import ModelWrapper
 
 
 def test_layer_FIFO():
-    inp = helper.make_tensor_value_info("in", TensorProto.FLOAT, [2, 4, 4])
-    outp = helper.make_tensor_value_info("out", TensorProto.FLOAT, [2, 4, 4])
+    inp = helper.make_tensor_value_info("inp", TensorProto.FLOAT, [2, 4, 4])
+    outp = helper.make_tensor_value_info("outp", TensorProto.FLOAT, [2, 4, 4])
 
     FIFO_node = helper.make_node(
         "FIFO",
@@ -33,7 +33,7 @@ def test_layer_FIFO():
     for tensor in graph.output:
         model.set_tensor_datatype(tensor.name, DataType["BIPOLAR"])
 
-    onnx.save(model.model, "FIFO-model.onnx")
+    #onnx.save(model.model, "FIFO-model.onnx")
 
     # generate input data
     input_tensor = np.random.randint(2, size=32)
@@ -43,5 +43,5 @@ def test_layer_FIFO():
     output_dict = oxe.execute_onnx(model, input_dict)
 
     assert (
-        output_dict["outp"] == input_dict["inp"]
+        output_dict["outp"].all() == input_dict["inp"].all()
     ), "FIFO input and FIFO output do not match!"
