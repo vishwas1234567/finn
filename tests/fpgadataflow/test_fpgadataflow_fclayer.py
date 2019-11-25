@@ -97,7 +97,7 @@ def test_fpgadataflow_fclayer_ibp_wbp_noact():
     # convert to bipolar values
     Wb = 2 * W - 1
     xb = 2 * x - 1
-    yb = np.dot(Wb, xb).reshape(oshape.shape)
+    yb = np.dot(Wb, xb).reshape(oshape)
     # XnorMul produces positive outputs only, adjust expectation accordingly
     expected = 2 * yb - mw
     assert (produced == expected).all()
